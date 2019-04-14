@@ -1,0 +1,19 @@
+﻿os: Visual Studio 2017
+
+configuration:
+  - Release
+
+artifacts:
+- path: EasyRank++\bin\$(configuration)
+  name: EasyRank++
+  type: zip
+
+deploy:
+  - provider: GitHub
+    description: "EasyRank++ $(appveyor_repo_tag_name)"
+    auth_token:
+      secure: I1jdk+yWveWmwOsMLIsMxZsHIjW3dW4Lm2/PsJDg1tv3VTM8rKZrbR1M9oE9FsU+
+    draft: false
+    prerelease: false
+    on:
+      appveyor_repo_tag: true
