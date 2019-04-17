@@ -30,13 +30,21 @@ namespace EasyRank__
 
         private void StartButton_Checked(object sender, RoutedEventArgs e)
         {
-            // Retrieve the StarCraft II processes.
-            var processes = Process.GetProcessesByName("SC2_x64");
-
-            var hWnd = processes.First().MainWindowHandle;
-
             // Make sure the user entered a key to press.
             if (selectedKey.Text.Length != 1)
+                return;
+
+            // Retrieve the StarCraft II processes.
+            var process32Bit = Process.GetProcessesByName("SC2").FirstOrDefault();
+            var process64Bit = Process.GetProcessesByName("SC2_x64").FirstOrDefault();
+
+            // Prefer the 64-bit process, falling back to the 32-bit process if not found.
+            var hWnd = process64Bit?.MainWindowHandle
+                ?? process32Bit?.MainWindowHandle
+                ?? IntPtr.Zero;
+
+            // Could not find StarCraft process.
+            if (hWnd == IntPtr.Zero)
                 return;
 
             char keyCode = selectedKey.Text.Single();
